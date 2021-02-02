@@ -1,0 +1,18 @@
+#cloud-config
+package_update: true
+users:
+  - default
+  - name: thechap
+runcmd:
+  - curl https://get.docker.com | bash
+  - usermod -aG docker thechap
+  - apt install -y openjdk-8-jdk
+  - apt install -y maven
+  - wget -q -O - https://pkg.jenkins.io/debian/jenkins.io.key | apt-key add -
+  - sh -c 'echo deb http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
+  - apt update
+  - apt install -y jenkins
+  - sleep 20s
+  - touch /home/thechap/adminpass.txt
+  - chmod 666 /home/thechap/adminpass.txt
+  - cat /var/lib/jenkins/secrets/initialAdminPassword > /home/thechap/adminpass.txt
